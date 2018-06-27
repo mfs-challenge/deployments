@@ -24,6 +24,13 @@ spec:
             value: "team6"
           - name: MONGOURL
             value: "mongodb://etorodb:Aa123456!@etoro-mongo-mongodb/database.default"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          linits:
+            memory: "128Mi"
+            cpu: "500m"
         ports:
           - containerPort: 8080
             protocol: TCP

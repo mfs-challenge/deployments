@@ -8,6 +8,6 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: fulfillorderack
-  minReplicas: 2
+  minReplicas: 11
   maxReplicas: 20
   targetCPUUtilizationPercentage: 50
