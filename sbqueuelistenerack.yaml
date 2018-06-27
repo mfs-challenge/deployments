@@ -19,9 +19,9 @@ spec:
           - name: TEAMNAME
             value: "team6"
           - name: PROCESSENDPOINT
-            value: "http://10.0.0.97:8080/v1/order/"
+            value: "http://10.0.243.17610.0.0.97:8080/v1/order/"
           - name: AMQPURL
-            value: "https://etoro-aks.servicebus.windows.net"
+            value: "sb://etoro-aks.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=EbWO2nTpeYvYphQX6o57VHk8PnsdjWwci/E0MWBzpZY="
         ports:
           - containerPort: 8080
             protocol: TCP
