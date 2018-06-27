@@ -1,31 +1,27 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: sbqueuelistenerack
+  name: rabbitmqlistenerack
 spec:
   replicas: 10
   template:
     metadata:
       labels:
-        task: sbqueuelistenerack
-        k8s-app: sbqueuelistenerack
+        task: rabbitmqlistenerack
+        k8s-app: rabbitmqlistenerack
     spec:
       containers:
-      - name: sbqueuelistenerack
-        image: torosent/sbqueuelistenerack:latest
+      - name: rabbitmqlistenerack
+        image: torosent/rabbitmqlistenerack:latest
         env:
-          - name: APPINSIGHTS_KEY
-            value: "ae038c96-cd43-4643-9814-81a7ea378e48"
           - name: CHALLENGEAPPINSIGHTS_KEY
-            value: "aa827fbb-dea3-40cc-85c8-abc9c0cedb08"
+            value: "534fd36c-889c-4cce-977a-49ccd6d6e5cf"
           - name: TEAMNAME
             value: "team6"
           - name: PROCESSENDPOINT
             value: "http://10.0.243.176:8080/v1/order/"
-          - name: SERVICEBUSCONNSTRING
-            value: "Endpoint=sb://etoro-aks.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=EbWO2nTpeYvYphQX6o57VHk8PnsdjWwci/E0MWBzpZY="
-          - name: SERVICEBUSQUEUENAME
-            value: "orders"
+          - name: AMQPURL
+            value: "amqp://etoro-rabit:Aa123456@rabbit-rabbitmq:5672"
         ports:
           - containerPort: 8080
             protocol: TCP
@@ -60,3 +56,4 @@ spec:
   - port: 8080
   selector:
     k8s-app: fulfillorderack
+
