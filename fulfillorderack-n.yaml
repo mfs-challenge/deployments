@@ -1,0 +1,58 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: fulfillorderack
+spec:
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        task: fulfillorderack
+        k8s-app: fulfillorderack
+    spec:
+      containers:
+      - name: fulfillorderack
+        image: torosent/fulfillorderack:latest
+        env:
+          - name: APPINSIGHT_KEY
+            value: "ae038c96-cd43-4643-9814-81a7ea378e48"
+          - name: CHALLENGEAPPINSIGHTS_KEY
+            value: "aa827fbb-dea3-40cc-85c8-abc9c0cedb08"
+          - name: TEAMNAME
+            value: "team6"
+          - name: MONGOURL
+            value: "mongodb://etoro-aks-n:6WHUAWrR607obp14k35WJT9YfD8TgwbMNKUaLulIPg1CZy9fn5DP7f6O6d0QoBUKLT3XtGzfiyxzIFoz20NbLg==@etoro-aks-n.documents.azure.com:10255/mean-dev?ssl=true&sslverifycertificate=false"
+        ports:
+          - containerPort: 8080
+            protocol: TCP
+        imagePullPolicy: Always
+        volumeMounts:
+          - mountPath: "/orders"
+            name: etoro-storage
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      volumes:
+        - name: etoro-storage
+          persistentVolumeClaim:
+            claimName: myclaim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
+    # If you are NOT using this as an addon, you should comment out this line.
+    kubernetes.io/name: fulfillorderack-service
+  name: fulfillorderack
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  # In a production setup, we recommend accessing Grafana through an external Loadbalancer
+  # or through a public IP.
+  type: LoadBalancer
+  # You could also use NodePort to expose the service at a randomly-generated port
+  # type: NodePort
+  ports:
+  - port: 8080
+  selector:
+    k8s-app: fulfillorderack
