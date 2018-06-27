@@ -14,16 +14,18 @@ spec:
       - name: sbqueuelistenerack
         image: torosent/sbqueuelistenerack:latest
         env:
+          - name: APPINSIGHTS_KEY
+            value: "ae038c96-cd43-4643-9814-81a7ea378e48"
           - name: CHALLENGEAPPINSIGHTS_KEY
-            value: "534fd36c-889c-4cce-977a-49ccd6d6e5cf"
+            value: "aa827fbb-dea3-40cc-85c8-abc9c0cedb08"
           - name: TEAMNAME
             value: "team6"
           - name: PROCESSENDPOINT
-            value: "http://10.0.243.17610.0.0.97:8080/v1/order/"
+            value: "http://10.0.243.176:8080/v1/order/"
           - name: SERVICEBUSCONNSTRING
             value: "Endpoint=b://etoro-aks.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=EbWO2nTpeYvYphQX6o57VHk8PnsdjWwci/E0MWBzpZY="
-            name: SERVICEBUSQUEUENAME
-            value: orders
+          - name: SERVICEBUSQUEUENAME
+            value: "orders"
         ports:
           - containerPort: 8080
             protocol: TCP
