@@ -1,0 +1,58 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sbqueuelistenerack
+spec:
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        task: sbqueuelistenerack
+        k8s-app: sbqueuelistenerack
+    spec:
+      containers:
+      - name: sbqueuelistenerack
+        image: torosent/sbqueuelistenerack:latest
+        env:
+          - name: CHALLENGEAPPINSIGHTS_KEY
+            value: "534fd36c-889c-4cce-977a-49ccd6d6e5cf"
+          - name: TEAMNAME
+            value: "team6"
+          - name: PROCESSENDPOINT
+            value: "http://10.0.0.97:8080/v1/order/"
+          - name: AMQPURL
+            value: "https://etoro-aks.servicebus.windows.net"
+        ports:
+          - containerPort: 8080
+            protocol: TCP
+        imagePullPolicy: Always
+        volumeMounts:
+          - mountPath: "/orders"
+            name: etoro-storage
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      volumes:
+        - name: etoro-storage
+          persistentVolumeClaim:
+            claimName: myclaim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
+    # If you are NOT using this as an addon, you should comment out this line.
+    kubernetes.io/name: fulfillorderack-service
+  name: fulfillorderack
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  # In a production setup, we recommend accessing Grafana through an external Loadbalancer
+  # or through a public IP.
+  type: LoadBalancer
+  # You could also use NodePort to expose the service at a randomly-generated port
+  # type: NodePort
+  ports:
+  - port: 8080
+  selector:
+    k8s-app: fulfillorderack
