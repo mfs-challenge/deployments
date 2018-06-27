@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkinsmaster
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        task: jenkinsmaster
+        k8s-app: jenkinsmaster
+    spec:
+      containers:
+      - name: jenkinsmaster
+        image: jenkins:latest
+        ports:
+          - containerPort: 8080
+            protocol: TCP
+        imagePullPolicy: Always
+        volumeMounts:
+          - mountPath: "/var/jenkins_home"
+            name: etoro-storage
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      volumes:
+        - name: etoro-storage
+          persistentVolumeClaim:
+            claimName: jenkisnspv
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
+    # If you are NOT using this as an addon, you should comment out this line.
+    kubernetes.io/name: jenkinsmaster-service
+  name: jenkinsmaster
+spec:
+  # In a production setup, we recommend accessing Grafana through an external Loadbalancer
+  # or through a public IP.
+  type: LoadBalancer
+  # You could also use NodePort to expose the service at a randomly-generated port
+  # type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    k8s-app: jenkinsmaster
