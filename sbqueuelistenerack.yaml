@@ -21,7 +21,9 @@ spec:
           - name: PROCESSENDPOINT
             value: "http://10.0.243.17610.0.0.97:8080/v1/order/"
           - name: SERVICEBUSCONNSTRING
-            value: "sb://etoro-aks.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=EbWO2nTpeYvYphQX6o57VHk8PnsdjWwci/E0MWBzpZY="
+            value: "Endpoint=b://etoro-aks.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=EbWO2nTpeYvYphQX6o57VHk8PnsdjWwci/E0MWBzpZY="
+            name: SERVICEBUSQUEUENAME
+            value: orders
         ports:
           - containerPort: 8080
             protocol: TCP
