@@ -22,7 +22,7 @@ spec:
             value: "team6"
           - name: MONGOURL
             value: "mongodb://etorodb:Aa123456!@etoro-mongo-mongodb/database.default"
-        imagerPullSecrets:
+        imagePullSecrets:
           - name: eyalreg
         ports:
           - containerPort: 8080
