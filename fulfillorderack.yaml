@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: fulfillorderack
-        image: torosent/fulfillorderack:latest
+        image: aksregistryetoro.azurecr.io/fulfillorderack:latest
         env:
           - name: APPINSIGHT_KEY
             value: "ae038c96-cd43-4643-9814-81a7ea378e48"
