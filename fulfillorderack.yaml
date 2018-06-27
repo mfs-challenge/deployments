@@ -10,6 +10,8 @@ spec:
         task: fulfillorderack
         k8s-app: fulfillorderack
     spec:
+      imagePullSecrets:
+        - name: eyalreg
       containers:
       - name: fulfillorderack
         image: aksregistryetoro.azurecr.io/fulfillorderack:latest
@@ -22,8 +24,6 @@ spec:
             value: "team6"
           - name: MONGOURL
             value: "mongodb://etorodb:Aa123456!@etoro-mongo-mongodb/database.default"
-        imagePullSecrets:
-          - name: eyalreg
         ports:
           - containerPort: 8080
             protocol: TCP
